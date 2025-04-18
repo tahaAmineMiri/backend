@@ -1,0 +1,30 @@
+package com.incon.backend.entity;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Seller extends User {
+
+    @Transient
+    private List<Product> products = new ArrayList<>();
+
+
+    // Additional seller-specific methods
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+    }
+}

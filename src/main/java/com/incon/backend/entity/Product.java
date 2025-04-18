@@ -117,6 +117,10 @@ public class Product {
         return rating;
     }
 
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

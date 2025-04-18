@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @Table(name = "users") // 'user' is a reserved keyword in some databases
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -46,4 +45,46 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public String getBusinessPhone() {
+        return businessPhone;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+
 }

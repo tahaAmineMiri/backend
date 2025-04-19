@@ -17,7 +17,6 @@ class ProductTest {
         product2 = new Product("Test Product", "Test Description", 100.0f, 10, "Test Category", "test_image.jpg");
     }
 
-
     @Test
     void testProductCreation() {
         assertNotNull(product1);

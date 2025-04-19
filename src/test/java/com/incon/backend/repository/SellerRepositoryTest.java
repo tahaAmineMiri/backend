@@ -95,10 +95,10 @@ public class SellerRepositoryTest {
         Seller savedSeller = sellerRepository.save(seller);
 
         // Then
-        assertNotNull(savedSeller.getUserId(), "Saved seller should have an ID");
+        assertNotNull(savedSeller.getId(), "Saved seller should have an ID");
 
         // Verify we can retrieve it
-        Seller retrievedSeller = entityManager.find(Seller.class, savedSeller.getUserId());
+        Seller retrievedSeller = entityManager.find(Seller.class, savedSeller.getId());
         assertNotNull(retrievedSeller, "Should be able to retrieve saved seller");
         assertEquals("new@example.com", retrievedSeller.getEmail(), "Retrieved seller should have correct email");
         assertEquals("New Seller", retrievedSeller.getFullName(), "Retrieved seller should have correct name");
@@ -116,7 +116,7 @@ public class SellerRepositoryTest {
         seller = entityManager.persist(seller);
         entityManager.flush();
 
-        Long sellerId = seller.getUserId();
+        int sellerId = seller.getId();
 
         // When
         sellerRepository.delete(seller);
@@ -140,7 +140,7 @@ public class SellerRepositoryTest {
         entityManager.flush();
 
         // When
-        Optional<Seller> found = sellerRepository.findById(seller.getUserId().intValue());
+        Optional<Seller> found = sellerRepository.findById(seller.getId());
 
         // Then
         assertTrue(found.isPresent(), "Seller should be found by ID");

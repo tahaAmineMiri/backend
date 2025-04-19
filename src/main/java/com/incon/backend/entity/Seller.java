@@ -3,6 +3,7 @@ package com.incon.backend.entity;
 import jakarta.persistence.*;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder // Add this to work with the parent class's SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class Seller extends User {
 

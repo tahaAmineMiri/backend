@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,7 +21,7 @@ public class SellerTest {
         seller = new Seller();
 
         // Set User properties (from parent class)
-        seller.setUserId(1L);
+        seller.setId(1);
         seller.setEmail("seller@example.com");
         seller.setPassword("securePassword123");
         seller.setRole(Role.SELLER);
@@ -46,7 +45,7 @@ public class SellerTest {
     @Test
     void testSellerCreation() {
         assertNotNull(seller, "Seller should be created successfully");
-        assertEquals(1L, seller.getUserId(), "Seller ID should match the set value");
+        assertEquals(1, seller.getId(), "Seller ID should match the set value");
         assertEquals("seller@example.com", seller.getEmail(), "Email should match the set value");
         assertEquals("securePassword123", seller.getPassword(), "Password should match the set value");
         assertEquals(Role.SELLER, seller.getRole(), "Role should be SELLER");
@@ -125,14 +124,14 @@ public class SellerTest {
         Seller newSeller = new Seller(productList);
 
         // Set other required fields
-        newSeller.setUserId(2L);
+        newSeller.setId(2);
         newSeller.setEmail("seller2@example.com");
         newSeller.setPassword("password456");
         newSeller.setRole(Role.SELLER);
         newSeller.setFullName("Jane Seller");
 
         // Verify all properties
-        assertEquals(2L, newSeller.getUserId(), "Seller ID should match");
+        assertEquals(2, newSeller.getId(), "Seller ID should match");
         assertEquals("seller2@example.com", newSeller.getEmail(), "Email should match");
         assertEquals("Jane Seller", newSeller.getFullName(), "Full name should match");
         assertEquals(2, newSeller.getProducts().size(), "Products list size should match");

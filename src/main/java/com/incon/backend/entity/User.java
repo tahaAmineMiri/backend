@@ -1,12 +1,13 @@
 package com.incon.backend.entity;
 
-import com.incon.backend.enums.UserRole;
+import com.incon.backend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "users") // 'user' is a reserved keyword in some databases
@@ -30,7 +31,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private Role role;
 
     private String fullName;
 
@@ -58,7 +59,7 @@ public class User {
         return password;
     }
 
-    public UserRole getRole() {
+    public Role getRole() {
         return role;
     }
 

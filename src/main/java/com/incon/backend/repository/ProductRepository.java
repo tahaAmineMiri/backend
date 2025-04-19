@@ -18,6 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     // Find products by price range
     List<Product> findByPriceBetween(float minPrice, float maxPrice);
 
-    // Find products by name containing a keyword (case insensitive)
+    // Find products by name containing a keyword (case-insensitive)
     List<Product> findByNameContainingIgnoreCase(String keyword);
 }

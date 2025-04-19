@@ -1,214 +1,189 @@
-//package com.incon.backend.controller;
-//
-//import org.junit.jupiter.api.Test;
-//import static org.junit.jupiter.api.Assertions.*;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.incon.backend.dto.request.ProductRequest;
-//import com.incon.backend.dto.response.ProductResponse;
-//import com.incon.backend.service.ProductService;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.springframework.http.MediaType;
-//import org.springframework.security.test.context.support.WithMockUser;
-//import org.springframework.test.web.servlet.MockMvc;
-//
-//import java.util.Arrays;
-//import java.util.List;
-//
-//import static org.hamcrest.Matchers.hasSize;
-//import static org.hamcrest.Matchers.is;
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.ArgumentMatchers.anyInt;
-//import static org.mockito.Mockito.doNothing;
-//import static org.mockito.Mockito.when;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//
-//@WebMvcTest(controllers = ProductController.class)
-//@ExtendWith(MockitoExtension.class)
-//public class ProductControllerTest {
-//
-//    @Autowired
-//    private MockMvc mockMvc;
-//
-//    @Mock
-//    private ProductService productService;
-//
-//    @InjectMocks
-//    private ProductController productController;
-//
-//    @Autowired
-//    private ObjectMapper objectMapper;
-//
-//    private ProductRequest productRequest;
-//    private ProductResponse productResponse;
-//    private List<ProductResponse> productResponses;
-//
-//    @BeforeEach
-//    public void setup() {
-//        productRequest = new ProductRequest(
-//                "Test Product",
-//                "Test Description",
-//                99.99f,
-//                100,
-//                "Electronics",
-//                "test-image.jpg"
-//        );
-//
-//        productResponse = new ProductResponse();
-//        productResponse.setProductId(1);
-//        productResponse.setName("Test Product");
-//        productResponse.setDescription("Test Description");
-//        productResponse.setPrice(99.99f);
-//        productResponse.setStockQuantity(100);
-//        productResponse.setCategory("Electronics");
-//        productResponse.setImage("test-image.jpg");
-//        productResponse.setRating(0.0f);
-//        productResponse.setSellerId(1);
-//        productResponse.setSellerName("Test Seller");
-//
-//        ProductResponse anotherResponse = new ProductResponse();
-//        anotherResponse.setProductId(2);
-//        anotherResponse.setName("Another Product");
-//        anotherResponse.setDescription("Another Description");
-//        anotherResponse.setPrice(199.99f);
-//        anotherResponse.setStockQuantity(50);
-//        anotherResponse.setCategory("Clothing");
-//        anotherResponse.setImage("another-image.jpg");
-//        anotherResponse.setRating(4.5f);
-//        anotherResponse.setSellerId(1);
-//        anotherResponse.setSellerName("Test Seller");
-//
-//        productResponses = Arrays.asList(productResponse, anotherResponse);
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "SELLER")
-//    public void testCreateProduct() throws Exception {
-//        when(productService.createProduct(any(ProductRequest.class), anyInt())).thenReturn(productResponse);
-//
-//        mockMvc.perform(post("/api/products")
-//                        .param("sellerId", "1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(productRequest)))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.productId", is(1)))
-//                .andExpect(jsonPath("$.name", is("Test Product")))
-//                .andExpect(jsonPath("$.price", is(99.99)));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void testGetAllProducts() throws Exception {
-//        when(productService.getAllProducts()).thenReturn(productResponses);
-//
-//        mockMvc.perform(get("/api/products"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].productId", is(1)))
-//                .andExpect(jsonPath("$[0].name", is("Test Product")))
-//                .andExpect(jsonPath("$[1].productId", is(2)))
-//                .andExpect(jsonPath("$[1].name", is("Another Product")));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void testGetProductById() throws Exception {
-//        when(productService.getProductById(1)).thenReturn(productResponse);
-//
-//        mockMvc.perform(get("/api/products/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.productId", is(1)))
-//                .andExpect(jsonPath("$.name", is("Test Product")));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void testGetProductsByCategory() throws Exception {
-//        when(productService.getProductsByCategory("Electronics")).thenReturn(Arrays.asList(productResponse));
-//
-//        mockMvc.perform(get("/api/products/category/Electronics"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(1)))
-//                .andExpect(jsonPath("$[0].productId", is(1)))
-//                .andExpect(jsonPath("$[0].category", is("Electronics")));
-//    }
-//
-//    @Test
-//    @WithMockUser
-//    public void testGetProductsBySeller() throws Exception {
-//        when(productService.getProductsBySeller(1)).thenReturn(productResponses);
-//
-//        mockMvc.perform(get("/api/products/seller/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(2)))
-//                .andExpect(jsonPath("$[0].sellerId", is(1)))
-//                .andExpect(jsonPath("$[1].sellerId", is(1)));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "SELLER")
-//    public void testUpdateProduct() throws Exception {
-//        when(productService.updateProduct(anyInt(), any(ProductRequest.class))).thenReturn(productResponse);
-//
-//        mockMvc.perform(put("/api/products/1")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(productRequest)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.productId", is(1)))
-//                .andExpect(jsonPath("$.name", is("Test Product")));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "SELLER")
-//    public void testUpdateProductStock() throws Exception {
-//        ProductResponse updatedProduct = new ProductResponse();
-//        updatedProduct.setProductId(1);
-//        updatedProduct.setName("Test Product");
-//        updatedProduct.setStockQuantity(75);
-//        updatedProduct.setSellerId(1);
-//        updatedProduct.setSellerName("Test Seller");
-//
-//        when(productService.updateProductStock(1, 75)).thenReturn(updatedProduct);
-//
-//        mockMvc.perform(patch("/api/products/1/stock")
-//                        .param("quantity", "75"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.stockQuantity", is(75)));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "SELLER")
-//    public void testUpdateProductPrice() throws Exception {
-//        ProductResponse updatedProduct = new ProductResponse();
-//        updatedProduct.setProductId(1);
-//        updatedProduct.setName("Test Product");
-//        updatedProduct.setPrice(89.99f);
-//        updatedProduct.setSellerId(1);
-//        updatedProduct.setSellerName("Test Seller");
-//
-//        when(productService.updateProductPrice(1, 89.99f)).thenReturn(updatedProduct);
-//
-//        mockMvc.perform(patch("/api/products/1/price")
-//                        .param("price", "89.99"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.price", is(89.99)));
-//    }
-//
-//    @Test
-//    @WithMockUser(roles = "SELLER")
-//    public void testDeleteProduct() throws Exception {
-//        doNothing().when(productService).deleteProduct(1);
-//
-//        mockMvc.perform(delete("/api/products/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.success", is(true)))
-//                .andExpect(jsonPath("$.message", is("Product deleted successfully")));
-//    }
-//}
+package com.incon.backend.controller;
+
+import com.incon.backend.dto.request.ProductRequest;
+import com.incon.backend.dto.response.ApiResponse;
+import com.incon.backend.dto.response.ProductResponse;
+import com.incon.backend.service.ProductService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+public class ProductControllerTest {
+
+    @Mock
+    private ProductService productService;
+
+    @InjectMocks
+    private ProductController productController;
+
+    private ProductRequest productRequest;
+    private ProductResponse productResponse;
+    private List<ProductResponse> productResponseList;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+
+        // Initialize test data
+        productRequest = new ProductRequest();
+        productRequest.setName("Test Product");
+        productRequest.setDescription("This is a test product");
+        productRequest.setPrice(99.99f);
+        productRequest.setStockQuantity(100);
+        productRequest.setCategory("Electronics");
+        productRequest.setImage("test-image.jpg");
+
+        productResponse = new ProductResponse();
+        productResponse.setProductId(1);
+        productResponse.setName("Test Product");
+        productResponse.setDescription("This is a test product");
+        productResponse.setPrice(99.99f);
+        productResponse.setStockQuantity(100);
+        productResponse.setCategory("Electronics");
+        productResponse.setImage("test-image.jpg");
+
+        productResponseList = new ArrayList<>();
+        productResponseList.add(productResponse);
+    }
+
+    @Test
+    public void testCreateProduct() {
+        // Given
+        when(productService.createProduct(any(ProductRequest.class))).thenReturn(productResponse);
+
+        // When
+        ResponseEntity<ProductResponse> responseEntity = productController.createProduct(productRequest);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(productResponse, responseEntity.getBody());
+        verify(productService, times(1)).createProduct(any(ProductRequest.class));
+    }
+
+    @Test
+    public void testGetAllProducts() {
+        // Given
+        when(productService.getAllProducts()).thenReturn(productResponseList);
+
+        // When
+        ResponseEntity<List<ProductResponse>> responseEntity = productController.getAllProducts();
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponseList, responseEntity.getBody());
+        assertEquals(1, responseEntity.getBody().size());
+        verify(productService, times(1)).getAllProducts();
+    }
+
+    @Test
+    public void testGetProductById() {
+        // Given
+        when(productService.getProductById(anyInt())).thenReturn(productResponse);
+
+        // When
+        ResponseEntity<ProductResponse> responseEntity = productController.getProductById(1);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponse, responseEntity.getBody());
+        verify(productService, times(1)).getProductById(1);
+    }
+
+    @Test
+    public void testGetProductsByCategory() {
+        // Given
+        when(productService.getProductsByCategory(anyString())).thenReturn(productResponseList);
+
+        // When
+        ResponseEntity<List<ProductResponse>> responseEntity = productController.getProductsByCategory("Electronics");
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponseList, responseEntity.getBody());
+        assertEquals(1, responseEntity.getBody().size());
+        verify(productService, times(1)).getProductsByCategory("Electronics");
+    }
+
+    @Test
+    public void testUpdateProduct() {
+        // Given
+        when(productService.updateProduct(anyInt(), any(ProductRequest.class))).thenReturn(productResponse);
+
+        // When
+        ResponseEntity<ProductResponse> responseEntity = productController.updateProduct(1, productRequest);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponse, responseEntity.getBody());
+        verify(productService, times(1)).updateProduct(eq(1), any(ProductRequest.class));
+    }
+
+    @Test
+    public void testDeleteProduct() {
+        // Given
+        doNothing().when(productService).deleteProduct(anyInt());
+
+        // When
+        ResponseEntity<ApiResponse> responseEntity = productController.deleteProduct(1);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals("Product deleted successfully", responseEntity.getBody().getMessage());
+        assertEquals(HttpStatus.OK, responseEntity.getBody().getStatus());
+        verify(productService, times(1)).deleteProduct(1);
+    }
+
+    @Test
+    public void testUpdateProductStock() {
+        // Given
+        when(productService.updateProductStock(anyInt(), anyInt())).thenReturn(productResponse);
+
+        // When
+        ResponseEntity<ProductResponse> responseEntity = productController.updateProductStock(1, 150);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponse, responseEntity.getBody());
+        verify(productService, times(1)).updateProductStock(1, 150);
+    }
+
+    @Test
+    public void testUpdateProductPrice() {
+        // Given
+        when(productService.updateProductPrice(anyInt(), eq(129.99f))).thenReturn(productResponse);
+
+        // When
+        ResponseEntity<ProductResponse> responseEntity = productController.updateProductPrice(1, 129.99f);
+
+        // Then
+        assertNotNull(responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(productResponse, responseEntity.getBody());
+        verify(productService, times(1)).updateProductPrice(1, 129.99f);
+    }
+}

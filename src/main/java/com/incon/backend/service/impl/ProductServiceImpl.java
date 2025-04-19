@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponse createProduct(ProductRequest productRequest, int sellerId) {
+    public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = new Product(
                 productRequest.getName(),
                 productRequest.getDescription(),

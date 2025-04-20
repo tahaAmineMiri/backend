@@ -27,17 +27,17 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     @Transactional
-    public SellerResponse registerSeller(SellerRequest request) {
+    public SellerResponse registerSeller(SellerRequest sellerRequest) {
         // Check if email already exists
-        if (sellerRepository.existsByEmail(request.getEmail())) {
+        if (sellerRepository.existsByEmail(sellerRequest.getEmail())) {
             throw new BadRequestException("Email is already registered");
         }
 
-        // Convert request to entity
-        Seller seller = sellerMapper.toEntity(request);
+        // Convert sellerRequest to entity
+        Seller seller = sellerMapper.toEntity(sellerRequest);
 
         // Encode password
-        seller.setPassword(passwordEncoder.encode(request.getPassword()));
+        seller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
 
         // Save seller
         Seller savedSeller = sellerRepository.save(seller);
@@ -70,24 +70,24 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     @Transactional
-    public SellerResponse updateSeller(Integer sellerId, SellerRequest request) {
+    public SellerResponse updateSeller(Integer sellerId, SellerRequest sellerRequest) {
         Seller existingSeller = getSellerEntityById(sellerId);
 
         // Check if email is already taken by another user
-        if (!existingSeller.getEmail().equals(request.getEmail()) &&
-                sellerRepository.existsByEmail(request.getEmail())) {
+        if (!existingSeller.getEmail().equals(sellerRequest.getEmail()) &&
+                sellerRepository.existsByEmail(sellerRequest.getEmail())) {
             throw new BadRequestException("Email is already taken");
         }
 
         // Update seller information
-        existingSeller.setEmail(request.getEmail());
-        existingSeller.setFullName(request.getFullName());
-        existingSeller.setPosition(request.getPosition());
-        existingSeller.setBusinessPhone(request.getBusinessPhone());
+        existingSeller.setEmail(sellerRequest.getEmail());
+        existingSeller.setFullName(sellerRequest.getFullName());
+        existingSeller.setPosition(sellerRequest.getPosition());
+        existingSeller.setBusinessPhone(sellerRequest.getBusinessPhone());
 
         // Update password if provided
-        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
-            existingSeller.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (sellerRequest.getPassword() != null && !sellerRequest.getPassword().isEmpty()) {
+            existingSeller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
         }
 
 

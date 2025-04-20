@@ -3,15 +3,10 @@ package com.incon.backend.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -23,16 +18,10 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/", "/api/health").permitAll() // Allow access to home and health endpoints
-                    // Add other public endpoints as needed
-                    .requestMatchers("/api/auth/**").permitAll()
-                    // Secure other endpoints
-                    .anyRequest().authenticated()
+                        .anyRequest().permitAll() // 💥 Disable auth for ALL endpoints
                 )
-
-                // Configure authentication methods (like JWT) here
-                // For development, you might use:
-                .httpBasic();
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable); // ✅ properly disable deprecated method
 
         return http.build();
     }
@@ -41,5 +30,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

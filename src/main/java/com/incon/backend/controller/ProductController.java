@@ -26,7 +26,7 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('SELLER')")
+//    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> createProduct(
             @Valid @RequestBody ProductRequest productRequest) {
         ProductResponse createdProduct = productService.createProduct(productRequest);
@@ -53,7 +53,7 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('SELLER')")
+//    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable("id") int productId,
             @Valid @RequestBody ProductRequest productRequest) {
@@ -62,7 +62,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('SELLER') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable("id") int productId) {
         productService.deleteProduct(productId);
         return new ResponseEntity<>(
@@ -72,7 +72,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/stock")
-    @PreAuthorize("hasRole('SELLER')")
+//    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> updateProductStock(
             @PathVariable("id") int productId,
             @RequestParam int quantity) {
@@ -81,7 +81,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/price")
-    @PreAuthorize("hasRole('SELLER')")
+//    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> updateProductPrice(
             @PathVariable("id") int productId,
             @RequestParam float price) {

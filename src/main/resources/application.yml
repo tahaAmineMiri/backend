@@ -1,0 +1,57 @@
+server:
+  port: 8082
+  servlet:
+    session:
+      cookie:
+        same-site: strict
+
+spring:
+  application:
+    name: incon-marketplace-backend
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak.app.localhost:8088/realms/incon-market-realm
+  datasource:
+    url: jdbc:postgresql://aws-0-eu-west-3.pooler.supabase.com:5432/postgres?sslmode=require
+    username: postgres.hzolesmpnzeuqsgnjfsg
+    password: f6H8qD0yN3biWU8k
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+  jpa:
+    hibernate:
+      ddl-auto: update
+keycloak:  # Added for logout and additional Keycloak settings
+  realm: incon-market-realm
+  auth-server-url: http://keycloak.app.localhost:8088
+  resource: incon-market-frontend
+  public-client: true
+  logout-url: http://keycloak.app.localhost:8088/realms/incon-market-realm/protocol/openid-connect/logout
+
+mailtrap:
+  smtp:
+    host: smtp.mailtrap.io
+    port: 2525  # You can use 25, 465, 587, or 2525 based on your choice
+    username: 64435de6721fa2  # Your Mailtrap SMTP username
+    password: a9a1c5b4f035c1  # Your Mailtrap SMTP password
+    auth: PLAIN  # You can use LOGIN or CRAM-MD5 as well
+    tls: STARTTLS  # Optional: TLS encryption
+
+vonage:
+  api:
+    key: d8fc692d
+    secret: raYDXhoN1c4PKPdD
+  from:
+    number: +212708475833
+
+logging:
+  level:
+    org.springframework: DEBUG
+    org.springframework.security: DEBUG
+    com.incon: DEBUG

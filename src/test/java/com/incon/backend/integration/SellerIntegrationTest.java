@@ -62,7 +62,7 @@ public class SellerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(sellerRequest)))
                 .andExpect(status().isCreated())
-                .andReturn()-
+                .andReturn()
                 .getResponse()
                 .getContentAsString();
 

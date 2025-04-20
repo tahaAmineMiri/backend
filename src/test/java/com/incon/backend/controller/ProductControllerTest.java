@@ -67,16 +67,17 @@ public class ProductControllerTest {
     @Test
     public void testCreateProduct() {
         // Given
-        when(productService.createProduct(any(ProductRequest.class))).thenReturn(productResponse);
+        int sellerId = 1; // Add a sellerId
+        when(productService.createProduct(any(ProductRequest.class), eq(sellerId))).thenReturn(productResponse);
 
         // When
-        ResponseEntity<ProductResponse> responseEntity = productController.createProduct(productRequest);
+        ResponseEntity<ProductResponse> responseEntity = productController.createProduct(productRequest, sellerId);
 
         // Then
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(productResponse, responseEntity.getBody());
-        verify(productService, times(1)).createProduct(any(ProductRequest.class));
+        verify(productService, times(1)).createProduct(any(ProductRequest.class), eq(sellerId));
     }
 
     @Test

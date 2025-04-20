@@ -28,8 +28,10 @@ public class ProductRequest {
     @Min(value = 0, message = "Stock quantity cannot be negative")
     private Integer stockQuantity;
 
+    @NotBlank(message = "Category is required")
     private String category;
 
+    @NotBlank(message = "Image URL is required")
     private String image;
 
     // Constructors

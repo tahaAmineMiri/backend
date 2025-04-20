@@ -11,5 +11,5 @@ public interface SellerMapper {
     SellerResponse toSellerResponse(Seller seller);
 
     // Convert SellerRequest DTO to Seller entity
-    Seller toEntity(SellerRequest request);
+    Seller toSeller(SellerRequest request);
 }

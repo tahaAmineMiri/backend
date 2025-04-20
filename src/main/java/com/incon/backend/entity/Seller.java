@@ -15,9 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder // Add this to work with the parent class's SuperBuilder
 @EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("SELLER")
 public class Seller extends User {
 
-    @Transient
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
 

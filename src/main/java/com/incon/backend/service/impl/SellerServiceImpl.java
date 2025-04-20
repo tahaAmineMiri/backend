@@ -34,7 +34,7 @@ public class SellerServiceImpl implements SellerService {
         }
 
         // Convert sellerRequest to entity
-        Seller seller = sellerMapper.toEntity(sellerRequest);
+        Seller seller = sellerMapper.toSeller(sellerRequest);
 
         // Encode password
         seller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
@@ -89,7 +89,6 @@ public class SellerServiceImpl implements SellerService {
         if (sellerRequest.getPassword() != null && !sellerRequest.getPassword().isEmpty()) {
             existingSeller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
         }
-
 
         // Save updated seller
         Seller updatedSeller = sellerRepository.save(existingSeller);

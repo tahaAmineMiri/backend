@@ -3,6 +3,8 @@ package com.incon.backend.service.impl;
 import com.incon.backend.dto.request.ProductRequest;
 import com.incon.backend.dto.response.ProductResponse;
 import com.incon.backend.entity.Product;
+import com.incon.backend.entity.Seller;
+import com.incon.backend.exception.InvalidSellerIdException;
 import com.incon.backend.exception.ResourceNotFoundException;
 import com.incon.backend.repository.ProductRepository;
 import com.incon.backend.repository.SellerRepository;
@@ -13,30 +15,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;  // Inject ProductMapper
+    private final SellerRepository sellerRepository; // Inject SellerRepository
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, SellerRepository sellerRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;  // Initialize the mapper
+        this.sellerRepository = sellerRepository;
     }
 
     @Override
     @Transactional
-    public ProductResponse createProduct(ProductRequest productRequest) {
+    public ProductResponse createProduct(ProductRequest productRequest, int sellerId) {
+        if (sellerId <= 0) {
+            throw new InvalidSellerIdException("Invalid sellerId: " + sellerId);
+        }
+
+        Seller seller = sellerRepository.findById(sellerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + sellerId));
+
         Product product = new Product(
                 productRequest.getName(),
                 productRequest.getDescription(),
                 productRequest.getPrice(),
                 productRequest.getStockQuantity(),
                 productRequest.getCategory(),
-                productRequest.getImage()
+                productRequest.getImage(),
+                seller  // Set the seller
         );
 
         Product savedProduct = productRepository.save(product);
@@ -46,10 +57,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream()
-                .map(productMapper::toProductResponse)  // Use mapper
-                .collect(Collectors.toList());
+        return productMapper.toProductResponseList(products);
     }
+
+
 
     @Override
     public ProductResponse getProductById(int productId) {
@@ -61,9 +72,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getProductsByCategory(String category) {
         List<Product> products = productRepository.findByCategory(category);
-        return products.stream()
-                .map(productMapper::toProductResponse)  // Use mapper
-                .collect(Collectors.toList());
+        return productMapper.toProductResponseList(products);
+    }
+
+    @Override
+    public List<ProductResponse> getProductsBySeller(int sellerId) {
+        Seller seller = sellerRepository.findById(sellerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + sellerId));
+
+        List<Product> products = productRepository.findBySeller(seller);
+
+        return productMapper.toProductResponseList(products);
     }
 
     @Override
@@ -72,15 +91,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 
-        product.setName(productRequest.getName());
-        product.setDescription(productRequest.getDescription());
-        product.setPrice(productRequest.getPrice());
-        product.setStockQuantity(productRequest.getStockQuantity());
-        product.setCategory(productRequest.getCategory());
-
-        if (productRequest.getImage() != null) {
-            product.setImage(productRequest.getImage());
-        }
+        productMapper.updateProductFromRequest(productRequest, product);
 
         Product updatedProduct = productRepository.save(product);
         return productMapper.toProductResponse(updatedProduct);  // Use mapper

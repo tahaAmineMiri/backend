@@ -28,8 +28,9 @@ public class ProductController {
     @PostMapping
 //    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> createProduct(
-            @Valid @RequestBody ProductRequest productRequest) {
-        ProductResponse createdProduct = productService.createProduct(productRequest);
+            @Valid @RequestBody ProductRequest productRequest,
+            @RequestParam int sellerId) {
+        ProductResponse createdProduct = productService.createProduct(productRequest, sellerId);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
@@ -50,7 +51,11 @@ public class ProductController {
         List<ProductResponse> products = productService.getProductsByCategory(category);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<List<ProductResponse>> getProductsBySeller(@PathVariable int sellerId) {
+        List<ProductResponse> products = productService.getProductsBySeller(sellerId);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
     @PutMapping("/{id}")
 //    @PreAuthorize("hasRole('SELLER')")

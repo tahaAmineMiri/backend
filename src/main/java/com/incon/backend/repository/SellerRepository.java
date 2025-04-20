@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Integer> {
-
     // Find a seller by their email address
     Optional<Seller> findByEmail(String email);
 

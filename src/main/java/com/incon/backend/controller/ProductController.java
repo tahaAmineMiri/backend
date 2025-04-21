@@ -8,7 +8,6 @@ import com.incon.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,11 +24,12 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping
+
+    @PostMapping("/seller/{sellerId}")
 //    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> createProduct(
             @Valid @RequestBody ProductRequest productRequest,
-            @RequestParam int sellerId) {
+            @PathVariable int sellerId) {
         ProductResponse createdProduct = productService.createProduct(productRequest, sellerId);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }

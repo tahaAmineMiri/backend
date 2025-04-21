@@ -54,7 +54,7 @@ public class User {
     private String businessPhone;
 
     @NotNull
-    private boolean isVerified;
+    private boolean isVerified = false;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -18,7 +18,7 @@ public class Product {
     // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productId;
+    private Integer productId;
 
     @NotBlank(message = "Product name is required")
     @Column(nullable = false)
@@ -81,7 +81,7 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId;
+        return productId.equals(product.getProductId());
     }
 
     @Override

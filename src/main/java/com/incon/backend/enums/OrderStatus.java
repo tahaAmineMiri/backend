@@ -1,5 +1,9 @@
 package com.incon.backend.enums;
 
 public enum OrderStatus {
-    // TODO: define values
+    PENDING,
+    PROCESSING,
+    SHIPPED,
+    DELIVERED,
+    CANCELLED
 }

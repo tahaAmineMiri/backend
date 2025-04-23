@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -122,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductResponse updateProductPrice(int productId, float newPrice) {
+    public ProductResponse updateProductPrice(int productId, BigDecimal newPrice) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
 

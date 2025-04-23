@@ -18,11 +18,11 @@ public interface BuyerMapper {
     @Mapping(target = "orderIds", expression = "java(mapOrders(buyer.getOrders()))")
     BuyerResponse toResponse(Buyer buyer);
 
-    default List<Long> mapOrders(List<Order> orders) {
+    default List<Integer> mapOrders(List<Order> orders) {
         if (orders == null) return null;
         return orders.stream()
                 .map(Order::getOrderId)
-                .map(Integer::longValue)  // Convert Integer to Long
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // No conversion to Long
     }
+
 }

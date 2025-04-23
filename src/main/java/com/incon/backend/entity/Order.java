@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Order {
     private Date orderDate;
 
     @Column(nullable = false)
-    private Float totalAmount;
+    private BigDecimal totalAmount;
 
     private String shippingDetails;
 
@@ -43,6 +44,9 @@ public class Order {
 
     @OneToOne(mappedBy = "order")
     private Payment payment;
+
+    @Version
+    private Integer version;
 
     // Methods from class diagram
     public void updateStatus(OrderStatus status) {

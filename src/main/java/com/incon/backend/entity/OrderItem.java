@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,10 +22,10 @@ public class OrderItem {
     private Integer quantity;
 
     @Column(nullable = false)
-    private Float itemPrice;
+    private BigDecimal itemPrice;
 
     @Column(nullable = false)
-    private Float subtotal;
+    private BigDecimal subtotal;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -32,4 +34,9 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+        this.subtotal = this.itemPrice.multiply(BigDecimal.valueOf(quantity));
+    }
 }

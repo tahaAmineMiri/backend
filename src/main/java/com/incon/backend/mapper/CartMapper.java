@@ -16,7 +16,7 @@ public interface CartMapper {
     @Mapping(source = "totalAmount", target = "totalAmount")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "buyer.userId", target = "buyerId")
+    @Mapping(source = "buyer.id", target = "buyerId")
     @Mapping(source = "cartItems", target = "items")
     CartResponse toResponse(Cart cart);
 }

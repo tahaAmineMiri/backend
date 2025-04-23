@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -22,7 +23,7 @@ public class ProductRequest {
 
     @NotNull(message = "Price is required")
     @Min(value = 0, message = "Price cannot be negative")
-    private Float price;
+    private BigDecimal price;
 
     @NotNull(message = "Stock quantity is required")
     @Min(value = 0, message = "Stock quantity cannot be negative")
@@ -38,7 +39,7 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public ProductRequest(String name, String description, Float price, Integer stockQuantity,
+    public ProductRequest(String name, String description, BigDecimal price, Integer stockQuantity,
                           String category, String image) {
         this.name = name;
         this.description = description;

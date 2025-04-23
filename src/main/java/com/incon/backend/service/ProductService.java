@@ -4,6 +4,7 @@ package com.incon.backend.service;
 import com.incon.backend.dto.request.ProductRequest;
 import com.incon.backend.dto.response.ProductResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
@@ -24,5 +25,5 @@ public interface ProductService {
 
     ProductResponse updateProductStock(int productId, int newQuantity);
 
-    ProductResponse updateProductPrice(int productId, float newPrice);
+    ProductResponse updateProductPrice(int productId, BigDecimal newPrice);
 }

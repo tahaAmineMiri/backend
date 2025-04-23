@@ -1,14 +1,16 @@
 package com.incon.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+import java.math.BigDecimal;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "cart_items")
 public class CartItem {
 
@@ -19,32 +21,25 @@ public class CartItem {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
-    private Float itemPrice;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal itemPrice;
 
-    @Column(nullable = false)
-    private Float subtotal;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // Method from class diagram
     public void updateQuantity(int quantity) {
         this.quantity = quantity;
-        this.subtotal = this.itemPrice * quantity;
-
-        // Update cart total
+        this.subtotal = this.itemPrice.multiply(BigDecimal.valueOf(quantity));
         if (cart != null) {
-            float newTotal = 0.0f;
-            for (CartItem item : cart.getCartItems()) {
-                newTotal += item.getSubtotal();
-            }
-            cart.setTotalAmount(newTotal);
+            cart.updateTotalAmount();
         }
     }
 }

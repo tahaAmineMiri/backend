@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 
@@ -29,7 +30,7 @@ public class Product {
 
     @Positive(message = "Price must be greater than zero")
     @Column(nullable = false)
-    private float price;
+    private BigDecimal price;
 
     @Min(value = 0, message = "Stock quantity cannot be negative")
     private int stockQuantity;
@@ -54,7 +55,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, float price, int stockQuantity,
+    public Product(String name, String description, BigDecimal price, int stockQuantity,
                    String category, String image, Seller seller) {
         this.name = name;
         this.description = description;
@@ -71,7 +72,7 @@ public class Product {
         this.stockQuantity = newQuantity;
     }
 
-    public void updatePrice(float newPrice) {
+    public void updatePrice(BigDecimal newPrice) {
         this.price = newPrice;
     }
 

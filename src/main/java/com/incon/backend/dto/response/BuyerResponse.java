@@ -14,6 +14,4 @@ import java.util.List;
 public class BuyerResponse extends UserResponse {
     private Integer cartId;
     private List<Integer> orderIds;
-    private List<Integer> reviewIds;
-    private Integer subscriptionId;
 }

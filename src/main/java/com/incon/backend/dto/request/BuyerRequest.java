@@ -6,8 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class BuyerRequest extends UserRequest {
     // Add buyer-specific fields if needed

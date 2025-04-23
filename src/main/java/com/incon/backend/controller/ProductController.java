@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -89,7 +90,7 @@ public class ProductController {
 //    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductResponse> updateProductPrice(
             @PathVariable("id") int productId,
-            @RequestParam float price) {
+            @RequestParam BigDecimal price) {
         ProductResponse updatedProduct = productService.updateProductPrice(productId, price);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }

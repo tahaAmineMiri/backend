@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -21,7 +22,7 @@ public class Payment {
     private Integer paymentId;
 
     @Column(nullable = false)
-    private Float amount;
+    private BigDecimal amount;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;

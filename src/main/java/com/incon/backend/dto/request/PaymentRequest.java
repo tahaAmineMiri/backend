@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PaymentRequest {
 
+    @NotNull(message = "Order ID is required")
+    private Integer orderId;
+
     @NotNull(message = "Payment method is required")
-    private PaymentMethod paymentMethod;
+    private PaymentMethod method;
 
     private String referenceNumber;
 }

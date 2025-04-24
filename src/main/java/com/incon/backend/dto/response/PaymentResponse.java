@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class PaymentResponse {
     private Integer paymentId;
-    private Float amount;
+    private BigDecimal amount;
     private Date paymentDate;
     private PaymentMethod method;
     private PaymentStatus status;

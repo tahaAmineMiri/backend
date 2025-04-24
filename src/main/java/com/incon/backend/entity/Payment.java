@@ -21,6 +21,10 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paymentId;
 
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @Column(nullable = false)
     private BigDecimal amount;
 
@@ -33,11 +37,8 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     private String referenceNumber;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
 }

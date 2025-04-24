@@ -7,9 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -22,42 +24,46 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private OrderStatus status;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date orderDate;
-
-    @Column(nullable = false)
-    private BigDecimal totalAmount;
-
-    private String shippingDetails;
+    private String orderNumber = UUID.randomUUID().toString();
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Buyer buyer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();
-
     @OneToOne(mappedBy = "order")
     private Payment payment;
 
-    @Version
-    private Integer version;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    // Methods from class diagram
-    public void updateStatus(OrderStatus status) {
-        this.status = status;
+    private LocalDateTime orderDate = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.PENDING;
+
+    @Column(nullable = false)
+    private BigDecimal totalAmount = BigDecimal.ZERO;
+
+    private String shippingAddress;
+
+    private String billingAddress;
+
+    public void updateTotalAmount() {
+        this.totalAmount = orderItems.stream()
+                .map(item -> item.getItemPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void cancelOrder() {
-        if (this.status == OrderStatus.PENDING || this.status == OrderStatus.PROCESSING) {
-            this.status = OrderStatus.CANCELLED;
-        } else {
-            throw new IllegalStateException("Cannot cancel order in status: " + this.status);
-        }
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+        updateTotalAmount();
+    }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        orderItems.remove(orderItem);
+        orderItem.setOrder(null);
+        updateTotalAmount();
     }
 }

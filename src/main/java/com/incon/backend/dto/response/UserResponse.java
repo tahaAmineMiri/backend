@@ -1,16 +1,18 @@
 package com.incon.backend.dto.response;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class UserResponse {
-    private int id;
-    private String email;
-    private String fullName;
-    private String position;
-    private String businessPhone;
-    private boolean isVerified;
+    private Integer userId;
+    private String userEmail;
+    private String userFullName;
+    private String userPosition;
+    private String userBusinessPhone;
+    private boolean userIsVerified;
 }

@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemRequest {
-    private Integer cartId;        // Represents cart.cartId
-    private Integer productId;     // Represents product.productId
-    private Integer quantity;
-    private BigDecimal itemPrice;  // Renamed from price to match entity
+    private Integer cartId;
+    private Integer productId;
+    private Integer cartItemQuantity;
+    private BigDecimal cartItemPrice;
 }

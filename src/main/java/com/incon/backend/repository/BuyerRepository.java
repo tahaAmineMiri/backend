@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface BuyerRepository extends JpaRepository<Buyer, Integer> {
-    Optional<Buyer> findById(Integer id);
-    Optional<Buyer> findByEmail(String email);
+    Optional<Buyer> findByUserEmail(String userEmail);
+    boolean existsByUserEmail(String userEmail);
 }

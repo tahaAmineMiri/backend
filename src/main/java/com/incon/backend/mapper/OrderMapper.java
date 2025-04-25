@@ -4,22 +4,16 @@ import com.incon.backend.dto.response.OrderResponse;
 import com.incon.backend.entity.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {OrderItemMapper.class, PaymentMapper.class})
 public interface OrderMapper {
-
-    @Mappings({
-            @Mapping(source = "orderId", target = "orderId"),
-            @Mapping(source = "status", target = "status"),
-            @Mapping(source = "orderDate", target = "orderDate"),
-            @Mapping(source = "totalAmount", target = "totalAmount"),
-            @Mapping(source = "shippingDetails", target = "shippingDetails"),
-            @Mapping(source = "buyer.id", target = "buyerId"),
-            @Mapping(source = "orderItems", target = "items"),
-            @Mapping(source = "payment", target = "payment")
-    })
+    @Mapping(source = "orderId", target = "orderId")
+    @Mapping(source = "orderStatus", target = "orderStatus")
+    @Mapping(source = "orderDate", target = "orderDate")
+    @Mapping(source = "orderTotalAmount", target = "orderTotalAmount")
+    @Mapping(source = "orderShippingAddress", target = "orderShippingAddress")
+    @Mapping(source = "orderBuyer.userId", target = "buyerId")
+    @Mapping(source = "orderItems", target = "orderItems")
+    @Mapping(source = "orderPayment", target = "paymentResponse")
     OrderResponse toResponse(Order order);
 }

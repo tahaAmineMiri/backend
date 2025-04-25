@@ -14,9 +14,9 @@ public class OrderRequest {
     private Integer buyerId;
 
     @NotBlank(message = "Shipping address is required")
-    private String shippingAddress;  // Renamed from shippingDetails to match entity
+    private String orderShippingAddress;
 
-    private String billingAddress;   // Added to match entity
+    private String orderBillingAddress;
 
-    private String notes;            // Additional field for order notes
+    private String orderNotes;
 }

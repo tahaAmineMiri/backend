@@ -27,10 +27,10 @@ public interface SellerService {
     /**
      * Find a seller by email
      *
-     * @param email The seller email
+     * @param userEmail The seller email
      * @return The seller response
      */
-    SellerResponse getSellerByEmail(String email);
+    SellerResponse getSellerByEmail(String userEmail);
 
     /**
      * Get all sellers

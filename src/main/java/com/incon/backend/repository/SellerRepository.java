@@ -9,8 +9,8 @@ import java.util.Optional;
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Integer> {
     // Find a seller by their email address
-    Optional<Seller> findByEmail(String email);
+    Optional<Seller> findByUserEmail(String userEmail);
 
     // Check if a seller exists by their email address
-    boolean existsByEmail(String email);
+    boolean existsByUserEmail(String userEmail);
 }

@@ -6,5 +6,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BuyerRequest extends UserRequest {
-
+    // No additional fields needed
 }

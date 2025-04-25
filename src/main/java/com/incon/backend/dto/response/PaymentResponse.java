@@ -14,10 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class PaymentResponse {
     private Integer paymentId;
-    private BigDecimal amount;
+    private BigDecimal paymentAmount;
     private Date paymentDate;
-    private PaymentMethod method;
-    private PaymentStatus status;
-    private String referenceNumber;
+    private PaymentMethod paymentMethod;
+    private PaymentStatus paymentStatus;
+    private String paymentReferenceNumber;
     private Integer orderId;
 }

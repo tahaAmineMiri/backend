@@ -7,13 +7,9 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = CartItemMapper.class)
 public interface CartMapper {
-
     @Mapping(source = "cartId", target = "cartId")
-    @Mapping(source = "totalAmount", target = "totalAmount")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "buyer.id", target = "buyerId")
-    @Mapping(source = "cartItems", target = "items")
+    @Mapping(source = "cartTotalAmount", target = "cartTotalAmount")
+    @Mapping(source = "cartBuyer", target = "buyerResponse")
+    @Mapping(source = "cartItems", target = "cartItems")
     CartResponse toCartResponse(Cart cart);
-
 }

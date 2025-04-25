@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
+
 public class SellerResponse extends UserResponse {
     // No additional fields needed for the basic implementation
-
-    public SellerResponse(
-            int id, String email, String fullName, String position, String businessPhone, boolean isVerified
-    ) {
-        super(id, email, fullName, position, businessPhone, isVerified);
-    }
 }

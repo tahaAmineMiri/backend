@@ -11,11 +11,22 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BuyerMapper {
-
+    @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "userEmail", source = "userEmail")
+    @Mapping(target = "userFullName", source = "userFullName")
+    @Mapping(target = "userPosition", source = "userPosition")
+    @Mapping(target = "userBusinessPhone", source = "userBusinessPhone")
+    @Mapping(target = "userIsVerified", source = "userIsVerified")
     Buyer toEntity(BuyerRequest request);
 
-    @Mapping(target = "cartId", source = "cart.cartId")
-    @Mapping(target = "orderIds", expression = "java(mapOrders(buyer.getOrders()))")
+    @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "userEmail", source = "userEmail")
+    @Mapping(target = "userFullName", source = "userFullName")
+    @Mapping(target = "userPosition", source = "userPosition")
+    @Mapping(target = "userBusinessPhone", source = "userBusinessPhone")
+    @Mapping(target = "userIsVerified", source = "userIsVerified")
+    @Mapping(target = "cartId", source = "buyerCart.cartId")
+    @Mapping(target = "orderIds", expression = "java(mapOrders(buyer.getBuyerOrders()))")
     BuyerResponse toResponse(Buyer buyer);
 
     default List<Integer> mapOrders(List<Order> orders) {
@@ -24,5 +35,4 @@ public interface BuyerMapper {
                 .map(Order::getOrderId)
                 .collect(Collectors.toList());
     }
-
 }

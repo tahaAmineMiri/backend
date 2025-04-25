@@ -11,17 +11,17 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     // Find all products by category
-    List<Product> findByCategory(String category);
+    List<Product> findByProductCategory(String productCategory);
 
     // Find products by seller
-    List<Product> findBySeller(Seller seller);
+    List<Product> findByProductSeller(Seller productSeller);
 
     // Find products with stock less than a specific quantity
-    List<Product> findByStockQuantityLessThan(int quantity);
+    List<Product> findByProductStockQuantityLessThan(int quantity);
 
     // Find products by price range
-    List<Product> findByPriceBetween(float minPrice, float maxPrice);
+    List<Product> findByProductPriceBetween(java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice);
 
     // Find products by name containing a keyword (case-insensitive)
-    List<Product> findByNameContainingIgnoreCase(String keyword);
+    List<Product> findByProductNameContainingIgnoreCase(String keyword);
 }

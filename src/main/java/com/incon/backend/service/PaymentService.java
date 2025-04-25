@@ -9,8 +9,8 @@ import java.util.List;
 public interface PaymentService {
     PaymentResponse getPaymentById(Integer paymentId);
     PaymentResponse getPaymentByOrderId(Integer orderId);
-    List<PaymentResponse> getPaymentsByStatus(PaymentStatus status);
-    PaymentResponse updatePaymentReference(Integer paymentId, String referenceNumber);
+    List<PaymentResponse> getPaymentsByStatus(PaymentStatus paymentStatus);
+    PaymentResponse updatePaymentReference(Integer paymentId, String paymentReferenceNumber);
     PaymentResponse verifyPayment(Integer paymentId);
     PaymentResponse rejectPayment(Integer paymentId);
 }

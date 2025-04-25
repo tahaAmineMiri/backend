@@ -17,9 +17,9 @@ public class PaymentRequest {
     private Integer orderId;
 
     @NotNull(message = "Payment method is required")
-    private PaymentMethod method;
+    private PaymentMethod paymentMethod;
 
     private LocalDateTime paymentDate;
 
-    private String referenceNumber;
+    private String paymentReferenceNumber;
 }

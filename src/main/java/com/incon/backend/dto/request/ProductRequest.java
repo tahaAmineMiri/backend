@@ -13,39 +13,38 @@ import java.math.BigDecimal;
 @Getter
 public class ProductRequest {
 
-    // Getters and Setters
     @NotBlank(message = "Product name is required")
     @Size(min = 3, max = 100, message = "Product name must be between 3 and 100 characters")
-    private String name;
+    private String productName;
 
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
-    private String description;
+    private String productDescription;
 
     @NotNull(message = "Price is required")
     @Min(value = 0, message = "Price cannot be negative")
-    private BigDecimal price;
+    private BigDecimal productPrice;
 
     @NotNull(message = "Stock quantity is required")
     @Min(value = 0, message = "Stock quantity cannot be negative")
-    private Integer stockQuantity;
+    private Integer productStockQuantity;
 
     @NotBlank(message = "Category is required")
-    private String category;
+    private String productCategory;
 
     @NotBlank(message = "Image URL is required")
-    private String image;
+    private String productImage;
 
     // Constructors
     public ProductRequest() {
     }
 
-    public ProductRequest(String name, String description, BigDecimal price, Integer stockQuantity,
-                          String category, String image) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.category = category;
-        this.image = image;
+    public ProductRequest(String productName, String productDescription, BigDecimal productPrice,
+                          Integer productStockQuantity, String productCategory, String productImage) {
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.productStockQuantity = productStockQuantity;
+        this.productCategory = productCategory;
+        this.productImage = productImage;
     }
 }

@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    List<Order> findByBuyer(Buyer buyer);
-    List<Order> findByBuyerId(Integer buyerId);
-    List<Order> findByStatus(OrderStatus status);
+    List<Order> findByOrderBuyer(Buyer orderBuyer);
+    List<Order> findByOrderBuyerUserId(Integer buyerId);
+    List<Order> findByOrderStatus(OrderStatus orderStatus);
     List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end);
     Optional<Order> findByOrderNumber(String orderNumber);
 }

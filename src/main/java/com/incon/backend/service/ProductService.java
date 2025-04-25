@@ -1,6 +1,5 @@
 package com.incon.backend.service;
 
-
 import com.incon.backend.dto.request.ProductRequest;
 import com.incon.backend.dto.response.ProductResponse;
 
@@ -15,7 +14,7 @@ public interface ProductService {
 
     ProductResponse getProductById(int productId);
 
-    List<ProductResponse> getProductsByCategory(String category);
+    List<ProductResponse> getProductsByCategory(String productCategory);
 
     List<ProductResponse> getProductsBySeller(int sellerId);
 

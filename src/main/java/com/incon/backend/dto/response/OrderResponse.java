@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponse {
     private Integer orderId;
-    private OrderStatus status;
+    private OrderStatus orderStatus;
     private Date orderDate;
-    private BigDecimal totalAmount;
-    private String shippingDetails;
-    private PaymentResponse payment;
-    private List<OrderItemResponse> items;
+    private BigDecimal orderTotalAmount;
+    private String orderShippingAddress;
+    private PaymentResponse paymentResponse;
+    private List<OrderItemResponse> orderItems;
 }

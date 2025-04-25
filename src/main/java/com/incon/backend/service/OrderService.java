@@ -7,10 +7,10 @@ import com.incon.backend.enums.OrderStatus;
 import java.util.List;
 
 public interface OrderService {
-    OrderResponse createOrder(Integer userId, OrderRequest request);
+    OrderResponse createOrder(Integer buyerId, OrderRequest request);
     OrderResponse getOrderById(Integer orderId);
-    List<OrderResponse> getOrdersByUserId(Integer userId);
-    List<OrderResponse> getOrdersByStatus(OrderStatus status);
-    OrderResponse updateOrderStatus(Integer orderId, OrderStatus status);
+    List<OrderResponse> getOrdersByBuyerId(Integer buyerId);
+    List<OrderResponse> getOrdersByStatus(OrderStatus orderStatus);
+    OrderResponse updateOrderStatus(Integer orderId, OrderStatus orderStatus);
     OrderResponse cancelOrder(Integer orderId);
 }

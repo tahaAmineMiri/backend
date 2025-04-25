@@ -1,6 +1,5 @@
 package com.incon.backend.service.impl;
 
-
 import com.incon.backend.dto.request.SellerRequest;
 import com.incon.backend.dto.response.SellerResponse;
 import com.incon.backend.entity.Seller;
@@ -29,7 +28,7 @@ public class SellerServiceImpl implements SellerService {
     @Transactional
     public SellerResponse registerSeller(SellerRequest sellerRequest) {
         // Check if email already exists
-        if (sellerRepository.existsByEmail(sellerRequest.getEmail())) {
+        if (sellerRepository.existsByUserEmail(sellerRequest.getUserEmail())) {
             throw new BadRequestException("Email is already registered");
         }
 
@@ -37,7 +36,7 @@ public class SellerServiceImpl implements SellerService {
         Seller seller = sellerMapper.toSeller(sellerRequest);
 
         // Encode password
-        seller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
+        seller.setUserPassword(passwordEncoder.encode(sellerRequest.getUserPassword()));
 
         // Save seller
         Seller savedSeller = sellerRepository.save(seller);
@@ -54,9 +53,9 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     @Transactional(readOnly = true)
-    public SellerResponse getSellerByEmail(String email) {
-        Seller seller = sellerRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with email: " + email));
+    public SellerResponse getSellerByEmail(String userEmail) {
+        Seller seller = sellerRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with email: " + userEmail));
         return sellerMapper.toSellerResponse(seller);
     }
 
@@ -74,20 +73,20 @@ public class SellerServiceImpl implements SellerService {
         Seller existingSeller = getSellerEntityById(sellerId);
 
         // Check if email is already taken by another user
-        if (!existingSeller.getEmail().equals(sellerRequest.getEmail()) &&
-                sellerRepository.existsByEmail(sellerRequest.getEmail())) {
+        if (!existingSeller.getUserEmail().equals(sellerRequest.getUserEmail()) &&
+                sellerRepository.existsByUserEmail(sellerRequest.getUserEmail())) {
             throw new BadRequestException("Email is already taken");
         }
 
         // Update seller information
-        existingSeller.setEmail(sellerRequest.getEmail());
-        existingSeller.setFullName(sellerRequest.getFullName());
-        existingSeller.setPosition(sellerRequest.getPosition());
-        existingSeller.setBusinessPhone(sellerRequest.getBusinessPhone());
+        existingSeller.setUserEmail(sellerRequest.getUserEmail());
+        existingSeller.setUserFullName(sellerRequest.getUserFullName());
+        existingSeller.setUserPosition(sellerRequest.getUserPosition());
+        existingSeller.setUserBusinessPhone(sellerRequest.getUserBusinessPhone());
 
         // Update password if provided
-        if (sellerRequest.getPassword() != null && !sellerRequest.getPassword().isEmpty()) {
-            existingSeller.setPassword(passwordEncoder.encode(sellerRequest.getPassword()));
+        if (sellerRequest.getUserPassword() != null && !sellerRequest.getUserPassword().isEmpty()) {
+            existingSeller.setUserPassword(passwordEncoder.encode(sellerRequest.getUserPassword()));
         }
 
         // Save updated seller

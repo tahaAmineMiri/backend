@@ -20,15 +20,4 @@ public class OrderResponse {
     private String shippingDetails;
     private PaymentResponse payment;
     private List<OrderItemResponse> items;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class OrderItemResponse {
-        private Integer orderItemId;
-        private ProductResponse product;
-        private Integer quantity;
-        private BigDecimal itemPrice;
-        private BigDecimal subtotal;
-    }
 }

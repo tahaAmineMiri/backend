@@ -1,12 +1,14 @@
 package com.incon.backend.dto.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class BuyerRequest extends UserRequest {
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CartRequest {
+    private Integer buyerId;
 }

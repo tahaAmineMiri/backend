@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class PaymentRequest {
 
     @NotNull(message = "Payment method is required")
     private PaymentMethod method;
+
+    private LocalDateTime paymentDate;
 
     private String referenceNumber;
 }

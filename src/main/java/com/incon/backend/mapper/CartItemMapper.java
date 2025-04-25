@@ -9,8 +9,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface CartItemMapper {
 
-    CartItemMapper INSTANCE = Mappers.getMapper(CartItemMapper.class);
-
     @Mapping(source = "cartItemId", target = "cartItemId")
     @Mapping(source = "quantity", target = "quantity")
     @Mapping(source = "itemPrice", target = "itemPrice")

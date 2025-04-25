@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByBuyer(Buyer buyer);
-    List<Order> findByBuyerId(Long buyerId);
+    List<Order> findByBuyerId(Integer buyerId);
     List<Order> findByStatus(OrderStatus status);
     List<Order> findByOrderDateBetween(LocalDateTime start, LocalDateTime end);
     Optional<Order> findByOrderNumber(String orderNumber);

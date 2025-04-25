@@ -22,7 +22,7 @@ public interface BuyerMapper {
         if (orders == null) return null;
         return orders.stream()
                 .map(Order::getOrderId)
-                .collect(Collectors.toList()); // No conversion to Long
+                .collect(Collectors.toList());
     }
 
 }

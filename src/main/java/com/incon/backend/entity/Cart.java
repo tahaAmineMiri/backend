@@ -25,38 +25,37 @@ public class Cart {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", nullable = false)
-    private Buyer buyer;
+    private Buyer cartBuyer;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalAmount = BigDecimal.ZERO;
+    private BigDecimal cartTotalAmount = BigDecimal.ZERO;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime cartCreatedAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime cartUpdatedAt;
 
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cartItemCart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems = new ArrayList<>();
 
     public void updateTotalAmount() {
-        this.totalAmount = cartItems.stream()
-                .map(item -> item.getItemPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+        this.cartTotalAmount = cartItems.stream()
+                .map(item -> item.getCartItemPrice().multiply(BigDecimal.valueOf(item.getCartItemQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void addCartItem(CartItem cartItem) {
         cartItems.add(cartItem);
-        cartItem.setCart(this);
+        cartItem.setCartItemCart(this);
         updateTotalAmount();
     }
 
     public void removeCartItem(CartItem cartItem) {
         cartItems.remove(cartItem);
-        cartItem.setCart(null);
+        cartItem.setCartItemCart(null);
         updateTotalAmount();
     }
 }

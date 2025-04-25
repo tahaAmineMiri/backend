@@ -14,64 +14,63 @@ import java.util.Objects;
 @Table(name = "products")
 public class Product {
 
-    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
 
     @NotBlank(message = "Product name is required")
     @Column(nullable = false)
-    private String name;
+    private String productName;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String productDescription;
 
     @Positive(message = "Price must be greater than zero")
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal productPrice;
 
     @Min(value = 0, message = "Stock quantity cannot be negative")
-    private int stockQuantity;
+    private int productStockQuantity;
 
     @NotBlank(message = "Category is required")
     @Column(nullable = false)
-    private String category;
+    private String productCategory;
 
     @NotBlank(message = "Image URL is required")
     @Column(nullable = false)
-    private String image;
+    private String productImage;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "Rating cannot be negative")
     @DecimalMax(value = "5.0", inclusive = true, message = "Rating cannot exceed 5")
-    private float rating;
+    private float productRating;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
-    private Seller seller;
-
+    private Seller productSeller;
 
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal price, int stockQuantity,
-                   String category, String image, Seller seller) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.category = category;
-        this.image = image;
-        this.rating = 0.0f; // Default rating for new products
-        this.seller = seller;
+    public Product(String productName, String productDescription, BigDecimal productPrice,
+                   int productStockQuantity, String productCategory, String productImage,
+                   Seller productSeller) {
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.productPrice = productPrice;
+        this.productStockQuantity = productStockQuantity;
+        this.productCategory = productCategory;
+        this.productImage = productImage;
+        this.productRating = 0.0f; // Default rating for new products
+        this.productSeller = productSeller;
     }
 
     // Business methods
     public void updateStock(int newQuantity) {
-        this.stockQuantity = newQuantity;
+        this.productStockQuantity = newQuantity;
     }
 
     public void updatePrice(BigDecimal newPrice) {
-        this.price = newPrice;
+        this.productPrice = newPrice;
     }
 
     // equals and hashCode
@@ -92,10 +91,10 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "productId=" + productId +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", stockQuantity=" + stockQuantity +
-                ", category='" + category + '\'' +
+                ", productName='" + productName + '\'' +
+                ", productPrice=" + productPrice +
+                ", productStockQuantity=" + productStockQuantity +
+                ", productCategory='" + productCategory + '\'' +
                 '}';
     }
 }

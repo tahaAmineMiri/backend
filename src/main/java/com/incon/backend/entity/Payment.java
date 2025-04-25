@@ -23,22 +23,21 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Order paymentOrder;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal paymentAmount;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentMethod method;
+    private PaymentMethod paymentMethod;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status = PaymentStatus.PENDING;
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
-    private String referenceNumber;
-
+    private String paymentReferenceNumber;
 }

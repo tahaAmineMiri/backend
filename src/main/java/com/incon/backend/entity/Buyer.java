@@ -17,21 +17,21 @@ import java.util.List;
 @DiscriminatorValue("BUYER")
 public class Buyer extends User {
 
-    @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Cart cart;
+    @OneToOne(mappedBy = "cartBuyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart buyerCart;
 
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "orderBuyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> buyerOrders = new ArrayList<>();
 
     public void assignCart(Cart cart) {
-        this.cart = cart;
+        this.buyerCart = cart;
         if (cart != null) {
-            cart.setBuyer(this);
+            cart.setCartBuyer(this);
         }
     }
 
     public void addOrder(Order order) {
-        orders.add(order);
-        order.setBuyer(this);
+        buyerOrders.add(order);
+        order.setOrderBuyer(this);
     }
 }

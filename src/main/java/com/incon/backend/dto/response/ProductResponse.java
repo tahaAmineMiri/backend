@@ -5,17 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponse {
-
-    // Getters and Setters
     private int productId;
     private String name;
     private String description;
-    private float price;
+    private BigDecimal price;  // Changed from float to BigDecimal to match entity
     private int stockQuantity;
     private String category;
     private String image;

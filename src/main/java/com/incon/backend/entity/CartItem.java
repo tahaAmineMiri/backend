@@ -20,29 +20,29 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
-    private Cart cart;
+    private Cart cartItemCart;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Product cartItemProduct;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private Integer cartItemQuantity;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal itemPrice;
+    private BigDecimal cartItemPrice;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal subtotal;
+    private BigDecimal cartItemSubtotal;
 
     public void updateQuantity(int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive.");
         }
-        this.quantity = quantity;
-        this.subtotal = this.itemPrice.multiply(BigDecimal.valueOf(quantity));
-        if (cart != null) {
-            cart.updateTotalAmount();
+        this.cartItemQuantity = quantity;
+        this.cartItemSubtotal = this.cartItemPrice.multiply(BigDecimal.valueOf(quantity));
+        if (cartItemCart != null) {
+            cartItemCart.updateTotalAmount();
         }
     }
 }

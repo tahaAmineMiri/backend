@@ -27,42 +27,42 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
-    private Buyer buyer;
+    private Buyer orderBuyer;
 
-    @OneToOne(mappedBy = "order")
-    private Payment payment;
+    @OneToOne(mappedBy = "paymentOrder")
+    private Payment orderPayment;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderItemOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime orderDate = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status = OrderStatus.PENDING;
+    private OrderStatus orderStatus = OrderStatus.PENDING;
 
     @Column(nullable = false)
-    private BigDecimal totalAmount = BigDecimal.ZERO;
+    private BigDecimal orderTotalAmount = BigDecimal.ZERO;
 
-    private String shippingAddress;
+    private String orderShippingAddress;
 
-    private String billingAddress;
+    private String orderBillingAddress;
 
     public void updateTotalAmount() {
-        this.totalAmount = orderItems.stream()
-                .map(item -> item.getItemPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+        this.orderTotalAmount = orderItems.stream()
+                .map(item -> item.getOrderItemPrice().multiply(BigDecimal.valueOf(item.getOrderItemQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
-        orderItem.setOrder(this);
+        orderItem.setOrderItemOrder(this);
         updateTotalAmount();
     }
 
     public void removeOrderItem(OrderItem orderItem) {
         orderItems.remove(orderItem);
-        orderItem.setOrder(null);
+        orderItem.setOrderItemOrder(null);
         updateTotalAmount();
     }
 }

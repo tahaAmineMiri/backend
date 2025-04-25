@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequest {
-
-
     @NotNull(message = "Buyer ID is required")
     private Integer buyerId;
 
-    @NotBlank(message = "Shipping details are required")
-    private String shippingDetails;
+    @NotBlank(message = "Shipping address is required")
+    private String shippingAddress;  // Renamed from shippingDetails to match entity
 
-    private String notes;
+    private String billingAddress;   // Added to match entity
+
+    private String notes;            // Additional field for order notes
 }

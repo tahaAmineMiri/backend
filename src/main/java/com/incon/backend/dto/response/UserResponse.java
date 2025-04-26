@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@SuperBuilder // Make sure this is present
 public class UserResponse {
     private Integer userId;
     private String userEmail;

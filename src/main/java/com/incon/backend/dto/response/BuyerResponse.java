@@ -1,15 +1,15 @@
 package com.incon.backend.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder // Use SuperBuilder to work with inheritance
 @EqualsAndHashCode(callSuper = true)
 public class BuyerResponse extends UserResponse {
     private Integer cartId;

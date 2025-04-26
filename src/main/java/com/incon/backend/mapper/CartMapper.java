@@ -5,7 +5,7 @@ import com.incon.backend.entity.Cart;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = CartItemMapper.class)
+@Mapper(componentModel = "spring", uses = {CartItemMapper.class, BuyerMapper.class})
 public interface CartMapper {
     @Mapping(source = "cartId", target = "cartId")
     @Mapping(source = "cartTotalAmount", target = "cartTotalAmount")

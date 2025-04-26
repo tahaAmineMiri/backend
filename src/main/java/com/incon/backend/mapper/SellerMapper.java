@@ -24,5 +24,10 @@ public interface SellerMapper {
     @Mapping(source = "userPosition", target = "userPosition")
     @Mapping(source = "userBusinessPhone", target = "userBusinessPhone")
     @Mapping(source = "userRole", target = "userRole")
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "userIsVerified", constant = "false")
+    @Mapping(target = "userCreatedAt", ignore = true)
+    @Mapping(target = "userUpdatedAt", ignore = true)
+    @Mapping(target = "sellerProducts", ignore = true)
     Seller toSeller(SellerRequest request);
 }

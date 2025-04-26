@@ -20,6 +20,7 @@ public class Buyer extends User {
     @OneToOne(mappedBy = "cartBuyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart buyerCart;
 
+    @Builder.Default
     @OneToMany(mappedBy = "orderBuyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> buyerOrders = new ArrayList<>();
 

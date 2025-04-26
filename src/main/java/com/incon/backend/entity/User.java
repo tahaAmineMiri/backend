@@ -53,6 +53,8 @@ public class User {
     private String userBusinessPhone;
 
     @NotNull
+    // Add @Builder.Default to fields with initializers
+    @Builder.Default
     private boolean userIsVerified = false;
 
     @CreationTimestamp

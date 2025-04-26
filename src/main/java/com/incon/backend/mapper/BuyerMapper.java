@@ -11,28 +11,45 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BuyerMapper {
-    @Mapping(target = "userId", source = "userId")
+    @Mapping(target = "userPassword", source = "userPassword")
     @Mapping(target = "userEmail", source = "userEmail")
     @Mapping(target = "userFullName", source = "userFullName")
     @Mapping(target = "userPosition", source = "userPosition")
     @Mapping(target = "userBusinessPhone", source = "userBusinessPhone")
-    @Mapping(target = "userIsVerified", source = "userIsVerified")
+    @Mapping(target = "userRole", source = "userRole")
+    @Mapping(target = "userId", ignore = true)
+    @Mapping(target = "userIsVerified", constant = "false")
+    @Mapping(target = "userCreatedAt", ignore = true)
+    @Mapping(target = "userUpdatedAt", ignore = true)
+    @Mapping(target = "buyerCart", ignore = true)
+    @Mapping(target = "buyerOrders", ignore = true)
     Buyer toBuyer(BuyerRequest request);
 
-    @Mapping(target = "userId", source = "userId")
-    @Mapping(target = "userEmail", source = "userEmail")
-    @Mapping(target = "userFullName", source = "userFullName")
-    @Mapping(target = "userPosition", source = "userPosition")
-    @Mapping(target = "userBusinessPhone", source = "userBusinessPhone")
-    @Mapping(target = "userIsVerified", source = "userIsVerified")
-    @Mapping(target = "cartId", source = "buyerCart.cartId")
-    @Mapping(target = "orderIds", expression = "java(mapOrders(buyer.getBuyerOrders()))")
-    BuyerResponse toBuyerResponse(Buyer buyer);
+    // Create a custom method for mapping
+    default BuyerResponse toBuyerResponse(Buyer buyer) {
+        if (buyer == null) {
+            return null;
+        }
 
-    default List<Integer> mapOrders(List<Order> orders) {
-        if (orders == null) return null;
-        return orders.stream()
-                .map(Order::getOrderId)
-                .collect(Collectors.toList());
+        // Manual builder approach
+        BuyerResponse.BuyerResponseBuilder<?, ?> builder = BuyerResponse.builder()
+                .userId(buyer.getUserId())
+                .userEmail(buyer.getUserEmail())
+                .userFullName(buyer.getUserFullName())
+                .userPosition(buyer.getUserPosition())
+                .userBusinessPhone(buyer.getUserBusinessPhone())
+                .userIsVerified(buyer.isUserIsVerified())
+                .cartId(buyer.getBuyerCart() != null ? buyer.getBuyerCart().getCartId() : null);
+
+        // Map the orders
+        List<Integer> orderIds = null;
+        if (buyer.getBuyerOrders() != null) {
+            orderIds = buyer.getBuyerOrders().stream()
+                    .map(Order::getOrderId)
+                    .collect(Collectors.toList());
+        }
+        builder.orderIds(orderIds);
+
+        return builder.build();
     }
 }

@@ -2,12 +2,16 @@ package com.incon.backend.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -48,21 +52,6 @@ public class Product {
     @JoinColumn(name = "seller_id", nullable = false)
     private Seller productSeller;
 
-    public Product() {
-    }
-
-    public Product(String productName, String productDescription, BigDecimal productPrice,
-                   int productStockQuantity, String productCategory, String productImage,
-                   Seller productSeller) {
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productPrice = productPrice;
-        this.productStockQuantity = productStockQuantity;
-        this.productCategory = productCategory;
-        this.productImage = productImage;
-        this.productRating = 0.0f; // Default rating for new products
-        this.productSeller = productSeller;
-    }
 
     // Business methods
     public void updateStock(int newQuantity) {

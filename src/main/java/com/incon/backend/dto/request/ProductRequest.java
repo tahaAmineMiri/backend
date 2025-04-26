@@ -1,6 +1,7 @@
 package com.incon.backend.dto.request;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.validation.constraints.Min;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 
+@NoArgsConstructor
 @Setter
 @Getter
 public class ProductRequest {
@@ -35,8 +37,6 @@ public class ProductRequest {
     private String productImage;
 
     // Constructors
-    public ProductRequest() {
-    }
 
     public ProductRequest(String productName, String productDescription, BigDecimal productPrice,
                           Integer productStockQuantity, String productCategory, String productImage) {

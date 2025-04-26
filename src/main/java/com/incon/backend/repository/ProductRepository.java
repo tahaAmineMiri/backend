@@ -5,6 +5,7 @@ import com.incon.backend.entity.Seller;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -20,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByProductStockQuantityLessThan(int quantity);
 
     // Find products by price range
-    List<Product> findByProductPriceBetween(java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice);
+    List<Product> findByProductPriceBetween(BigDecimal minPrice, BigDecimal maxPrice);
 
     // Find products by name containing a keyword (case-insensitive)
     List<Product> findByProductNameContainingIgnoreCase(String keyword);

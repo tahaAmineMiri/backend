@@ -10,8 +10,8 @@ import java.util.Optional;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
     // Find cart by buyer
-    Optional<Cart> findByCartBuyer(Buyer cartBuyer);
+    Optional<Cart> findCartByBuyer(Buyer buyer);
 
     // Find by buyer id
-    Optional<Cart> findByCartBuyerId(Integer buyerId);
+    Optional<Cart> findCartByBuyerId(Integer buyerId);
 }

@@ -4,21 +4,45 @@ import com.incon.backend.dto.request.ProductRequest;
 import com.incon.backend.dto.response.ProductResponse;
 import com.incon.backend.entity.Product;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    // Single entity to response DTO
+
+    @Mapping(source = "productId", target = "productId")
+    @Mapping(source = "productName", target = "productName")
+    @Mapping(source = "productDescription", target = "productDescription")
+    @Mapping(source = "productPrice", target = "productPrice")
+    @Mapping(source = "productStockQuantity", target = "productStockQuantity")
+    @Mapping(source = "productCategory", target = "productCategory")
+    @Mapping(source = "productImage", target = "productImage")
+    @Mapping(source = "productRating", target = "productRating")
     ProductResponse toProductResponse(Product product);
 
-    // List of entities to list of response DTOs
     List<ProductResponse> toProductResponseList(List<Product> products);
 
-    // Request DTO to entity (for saving or updating)
+    @Mapping(target = "productId", ignore = true)
+    @Mapping(target = "productSeller", ignore = true)
+    @Mapping(target = "productRating", ignore = true)
+    @Mapping(source = "productName", target = "productName")
+    @Mapping(source = "productDescription", target = "productDescription")
+    @Mapping(source = "productPrice", target = "productPrice")
+    @Mapping(source = "productStockQuantity", target = "productStockQuantity")
+    @Mapping(source = "productCategory", target = "productCategory")
+    @Mapping(source = "productImage", target = "productImage")
     Product toProduct(ProductRequest productRequest);
 
-    // Method to update an existing product entity with values from the product request
+    @Mapping(target = "productId", ignore = true)
+    @Mapping(target = "productSeller", ignore = true)
+    @Mapping(target = "productRating", ignore = true)
+    @Mapping(source = "productName", target = "productName")
+    @Mapping(source = "productDescription", target = "productDescription")
+    @Mapping(source = "productPrice", target = "productPrice")
+    @Mapping(source = "productStockQuantity", target = "productStockQuantity")
+    @Mapping(source = "productCategory", target = "productCategory")
+    @Mapping(source = "productImage", target = "productImage")
     void updateProductFromRequest(ProductRequest productRequest, @MappingTarget Product product);
 }

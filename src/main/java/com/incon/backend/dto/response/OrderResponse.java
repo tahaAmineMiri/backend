@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponse {
     private Integer orderId;
+    private Integer buyerId;
     private OrderStatus orderStatus;
     private Date orderDate;
     private BigDecimal orderTotalAmount;

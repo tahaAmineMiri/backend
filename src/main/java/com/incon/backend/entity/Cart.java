@@ -43,7 +43,7 @@ public class Cart {
 
     public void updateTotalAmount() {
         this.cartTotalAmount = cartItems.stream()
-                .map(item -> item.getCartItemPrice().multiply(BigDecimal.valueOf(item.getCartItemQuantity())))
+                .map(CartItem::getCartItemSubtotal)  // Use existing subtotal instead
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

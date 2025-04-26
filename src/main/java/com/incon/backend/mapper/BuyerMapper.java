@@ -17,7 +17,7 @@ public interface BuyerMapper {
     @Mapping(target = "userPosition", source = "userPosition")
     @Mapping(target = "userBusinessPhone", source = "userBusinessPhone")
     @Mapping(target = "userIsVerified", source = "userIsVerified")
-    Buyer toEntity(BuyerRequest request);
+    Buyer toBuyer(BuyerRequest request);
 
     @Mapping(target = "userId", source = "userId")
     @Mapping(target = "userEmail", source = "userEmail")
@@ -27,7 +27,7 @@ public interface BuyerMapper {
     @Mapping(target = "userIsVerified", source = "userIsVerified")
     @Mapping(target = "cartId", source = "buyerCart.cartId")
     @Mapping(target = "orderIds", expression = "java(mapOrders(buyer.getBuyerOrders()))")
-    BuyerResponse toResponse(Buyer buyer);
+    BuyerResponse toBuyerResponse(Buyer buyer);
 
     default List<Integer> mapOrders(List<Order> orders) {
         if (orders == null) return null;

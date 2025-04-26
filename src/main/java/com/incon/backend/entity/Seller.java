@@ -17,6 +17,7 @@ import java.util.List;
 @DiscriminatorValue("SELLER")
 public class Seller extends User {
 
+    @Builder.Default
     @OneToMany(mappedBy = "productSeller", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> sellerProducts = new ArrayList<>();
 

@@ -10,8 +10,13 @@ import java.util.List;
 
 @Repository
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
-    List<OrderItem> findByOrder(Order order);
-    List<OrderItem> findByOrderOrderId(Integer orderId);
-    List<OrderItem> findByProduct(Product product);
-    List<OrderItem> findByProductProductId(Integer productId);
+    // Change this method:
+    List<OrderItem> findByOrderItemOrder(Order order);  // Instead of findByOrder
+
+    // Change this method too:
+    List<OrderItem> findByOrderItemOrderOrderId(Integer orderId);  // Instead of findByOrderOrderId
+
+    // These methods also need to be updated:
+    List<OrderItem> findByOrderItemProduct(Product product);  // Instead of findByProduct
+    List<OrderItem> findByOrderItemProductProductId(Integer productId);  // Instead of findByProductProductId
 }

@@ -19,9 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -36,8 +34,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse createOrder(Integer buyerId, OrderRequest request) {
-        System.out.println("Creating order for buyer: " + buyerId);
-
         Buyer buyer = buyerRepository.findById(buyerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Buyer not found with id: " + buyerId));
 
@@ -45,8 +41,6 @@ public class OrderServiceImpl implements OrderService {
         if (cart == null || cart.getCartItems().isEmpty()) {
             throw new BadRequestException("Cart is empty. Cannot create order.");
         }
-
-        System.out.println("Found cart with items: " + cart.getCartItems().size());
 
         // Create new order
         Order order = new Order();
@@ -70,13 +64,8 @@ public class OrderServiceImpl implements OrderService {
         // Calculate total amount
         order.updateTotalAmount();
 
-        System.out.println("Order total amount: " + order.getOrderTotalAmount());
-
         // Save order
         Order savedOrder = orderRepository.save(order);
-
-        System.out.println("Saved order with ID: " + savedOrder.getOrderId());
-        System.out.println("Order items count: " + savedOrder.getOrderItems().size());
 
         // Create payment
         Payment payment = new Payment();
@@ -92,11 +81,7 @@ public class OrderServiceImpl implements OrderService {
         cart.updateTotalAmount();
         cartRepository.save(cart);
 
-        OrderResponse response = orderMapper.toResponse(savedOrder);
-        System.out.println("Created response with order ID: " +
-                (response != null ? response.getOrderId() : "null"));
-
-        return response;
+        return orderMapper.toResponse(savedOrder);
     }
 
     @Override

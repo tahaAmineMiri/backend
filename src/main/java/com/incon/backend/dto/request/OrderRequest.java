@@ -10,9 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequest {
-    @NotNull(message = "Buyer ID is required")
-    private Integer buyerId;
-
     @NotBlank(message = "Shipping address is required")
     private String orderShippingAddress;
 

@@ -10,8 +10,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemRequest {
-    private Integer cartId;
     private Integer productId;
     private Integer cartItemQuantity;
-    private BigDecimal cartItemPrice;
 }

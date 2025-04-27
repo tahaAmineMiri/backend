@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -80,13 +82,13 @@ public class CartServiceImpl implements CartService {
             cartItem.updateQuantity(newQuantity);
             cartItemRepository.save(cartItem);
         } else {
-            // Add new item
+            // Add new item - USE PRODUCT PRICE instead of request price
             cartItem = new CartItem();
             cartItem.setCartItemCart(cart);
             cartItem.setCartItemProduct(product);
             cartItem.setCartItemQuantity(request.getCartItemQuantity());
-            cartItem.setCartItemPrice(product.getProductPrice());
-            cartItem.setCartItemSubtotal(product.getProductPrice().multiply(java.math.BigDecimal.valueOf(request.getCartItemQuantity())));
+            cartItem.setCartItemPrice(product.getProductPrice()); // Use product price directly
+            cartItem.setCartItemSubtotal(product.getProductPrice().multiply(BigDecimal.valueOf(request.getCartItemQuantity())));
             cartItemRepository.save(cartItem);
         }
 

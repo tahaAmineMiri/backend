@@ -23,6 +23,8 @@ public class CorsConfig implements WebMvcConfigurer {
 
         // Restrict allowed methods to only what you need
         config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("OPTIONS");
 

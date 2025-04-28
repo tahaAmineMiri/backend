@@ -1,18 +1,29 @@
 server:
-  port: 8082
+  port: 8443
+
+  ssl:
+    key-store: classpath:localhost.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    enabled: true
+
   servlet:
     session:
+      secure: true         # Secure cookies (HTTPS-only)
+      http-only: true      # Not accessible from JS
       cookie:
-        same-site: strict
+        same-site: none    # Allows cross-origin cookies (needed if front and back are on different subdomains)
+
+# Removed address and same-site to rely on manual cookie settings
 
 spring:
-  application:
-    name: incon-marketplace-backend
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://keycloak.app.localhost:8088/realms/incon-market-realm
+#  application:
+#    name: incon-marketplace-backend
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://keycloak.app.localhost:8088/realms/incon-market-realm
   datasource:
     url: jdbc:postgresql://aws-0-eu-west-3.pooler.supabase.com:5432/postgres?sslmode=require
     username: postgres.hzolesmpnzeuqsgnjfsg
@@ -27,12 +38,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-keycloak:  # Added for logout and additional Keycloak settings
-  realm: incon-market-realm
-  auth-server-url: http://keycloak.app.localhost:8088
-  resource: incon-market-frontend
-  public-client: true
-  logout-url: http://keycloak.app.localhost:8088/realms/incon-market-realm/protocol/openid-connect/logout
+#keycloak:  # Added for logout and additional Keycloak settings
+#  realm: incon-market-realm
+#  auth-server-url: http://keycloak.app.localhost:8088
+#  resource: incon-market-frontend
+#  public-client: true
+#  logout-url: http://keycloak.app.localhost:8088/realms/incon-market-realm/protocol/openid-connect/logout
 
 mailtrap:
   smtp:

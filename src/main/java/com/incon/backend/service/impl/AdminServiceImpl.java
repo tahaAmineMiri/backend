@@ -1,30 +1,22 @@
 package com.incon.backend.service.impl;
 
 import com.incon.backend.dto.request.AdminRequest;
-import com.incon.backend.dto.response.AdminResponse;
-import com.incon.backend.dto.response.OrderResponse;
-import com.incon.backend.dto.response.PaymentResponse;
-import com.incon.backend.entity.Admin;
-import com.incon.backend.entity.Order;
-import com.incon.backend.entity.Payment;
-import com.incon.backend.entity.User;
+import com.incon.backend.dto.response.*;
+import com.incon.backend.entity.*;
 import com.incon.backend.enums.OrderStatus;
 import com.incon.backend.enums.PaymentStatus;
+import com.incon.backend.enums.VerificationStatus;
 import com.incon.backend.exception.BadRequestException;
 import com.incon.backend.exception.ResourceNotFoundException;
-import com.incon.backend.mapper.AdminMapper;
-import com.incon.backend.mapper.OrderMapper;
-import com.incon.backend.mapper.PaymentMapper;
-import com.incon.backend.repository.AdminRepository;
-import com.incon.backend.repository.OrderRepository;
-import com.incon.backend.repository.PaymentRepository;
-import com.incon.backend.repository.UserRepository;
+import com.incon.backend.mapper.*;
+import com.incon.backend.repository.*;
 import com.incon.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,11 +28,18 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
+    private final CompanyRepository companyRepository;
+    private final SubscriptionRepository subscriptionRepository;
+
     private final AdminMapper adminMapper;
     private final OrderMapper orderMapper;
     private final PaymentMapper paymentMapper;
+    private final CompanyMapper companyMapper;
+    private final SubscriptionMapper subscriptionMapper;
+
     private final PasswordEncoder passwordEncoder;
 
+    // Existing methods
     @Override
     @Transactional
     public AdminResponse createAdmin(AdminRequest adminRequest) {
@@ -187,5 +186,126 @@ public class AdminServiceImpl implements AdminService {
 
         user.setUserIsVerified(false);
         userRepository.save(user);
+    }
+
+    // New methods for company management
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompanyResponse> getAllCompanies() {
+        return companyRepository.findAll().stream()
+                .map(companyMapper::toCompanyResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompanyResponse> getPendingVerificationCompanies() {
+        return companyRepository.findByCompanyVerificationStatus(VerificationStatus.PENDING).stream()
+                .map(companyMapper::toCompanyResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public CompanyResponse verifyCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + companyId));
+
+        company.setCompanyVerificationStatus(VerificationStatus.VERIFIED);
+        company.setCompanyIsVerified(true);
+
+        // Also verify the associated user
+        if (company.getCompanyUser() != null) {
+            User user = company.getCompanyUser();
+            user.setUserIsVerified(true);
+            userRepository.save(user);
+        }
+
+        Company verifiedCompany = companyRepository.save(company);
+        return companyMapper.toCompanyResponse(verifiedCompany);
+    }
+
+    @Override
+    @Transactional
+    public CompanyResponse rejectCompany(Integer companyId) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + companyId));
+
+        company.setCompanyVerificationStatus(VerificationStatus.REJECTED);
+        company.setCompanyIsVerified(false);
+
+        Company rejectedCompany = companyRepository.save(company);
+        return companyMapper.toCompanyResponse(rejectedCompany);
+    }
+
+    // New methods for subscription management
+    @Override
+    @Transactional(readOnly = true)
+    public List<SubscriptionResponse> getAllSubscriptions() {
+        return subscriptionRepository.findAll().stream()
+                .map(subscriptionMapper::toSubscriptionResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SubscriptionResponse> getExpiringSubscriptions(LocalDate withinDays) {
+        LocalDate endDate = LocalDate.now().plusDays(30); // Default to 30 days if not specified
+        if (withinDays != null) {
+            endDate = LocalDate.now().plusDays(withinDays.getDayOfMonth());
+        }
+
+        return subscriptionRepository.findBySubscriptionEndDateBetween(LocalDate.now(), endDate).stream()
+                .map(subscriptionMapper::toSubscriptionResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public SubscriptionResponse activateSubscription(Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with id: " + subscriptionId));
+
+        subscription.setSubscriptionIsActive(true);
+        Subscription activatedSubscription = subscriptionRepository.save(subscription);
+
+        return subscriptionMapper.toSubscriptionResponse(activatedSubscription);
+    }
+
+    @Override
+    @Transactional
+    public SubscriptionResponse deactivateSubscription(Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with id: " + subscriptionId));
+
+        subscription.setSubscriptionIsActive(false);
+        Subscription deactivatedSubscription = subscriptionRepository.save(subscription);
+
+        return subscriptionMapper.toSubscriptionResponse(deactivatedSubscription);
+    }
+
+    // Dashboard analytics methods
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalActiveUsers() {
+        return userRepository.findAll().size(); // In a real implementation, you'd have a dedicated query
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalVerifiedCompanies() {
+        return companyRepository.findByCompanyVerificationStatus(VerificationStatus.VERIFIED).size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalActiveSubscriptions() {
+        return subscriptionRepository.findBySubscriptionIsActive(true).size();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalPendingVerifications() {
+        return companyRepository.findByCompanyVerificationStatus(VerificationStatus.PENDING).size();
     }
 }

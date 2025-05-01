@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -52,6 +54,8 @@ public class Product {
     @JoinColumn(name = "seller_id", nullable = false)
     private Seller productSeller;
 
+    @OneToMany(mappedBy = "reviewProduct", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> productReviews = new ArrayList<>();
 
     // Business methods
     public void updateStock(int newQuantity) {
@@ -60,6 +64,31 @@ public class Product {
 
     public void updatePrice(BigDecimal newPrice) {
         this.productPrice = newPrice;
+    }
+
+    public void addReview(Review review) {
+        productReviews.add(review);
+        review.setReviewProduct(this);
+        updateRating();
+    }
+
+    public void removeReview(Review review) {
+        productReviews.remove(review);
+        review.setReviewProduct(null);
+        updateRating();
+    }
+
+    public void updateRating() {
+        if (productReviews.isEmpty()) {
+            this.productRating = 0.0f;
+            return;
+        }
+
+        float sum = 0.0f;
+        for (Review review : productReviews) {
+            sum += review.getReviewRating();
+        }
+        this.productRating = sum / productReviews.size();
     }
 
     // equals and hashCode

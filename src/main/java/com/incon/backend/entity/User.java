@@ -12,6 +12,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -62,4 +64,53 @@ public class User {
 
     @UpdateTimestamp
     private LocalDateTime userUpdatedAt;
+
+    @OneToOne(mappedBy = "companyUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Company userCompany;
+
+    @OneToOne(mappedBy = "subscriptionUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Subscription userSubscription;
+
+    @OneToMany(mappedBy = "reviewUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Review> userReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "notificationUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Notification> userNotifications = new ArrayList<>();
+
+    // Business methods
+    public void addReview(Review review) {
+        userReviews.add(review);
+        review.setReviewUser(this);
+    }
+
+    public void removeReview(Review review) {
+        userReviews.remove(review);
+        review.setReviewUser(null);
+    }
+
+    public void assignCompany(Company company) {
+        this.userCompany = company;
+        if (company != null) {
+            company.setCompanyUser(this);
+        }
+    }
+
+    public void assignSubscription(Subscription subscription) {
+        this.userSubscription = subscription;
+        if (subscription != null) {
+            subscription.setSubscriptionUser(this);
+        }
+    }
+
+    public void addNotification(Notification notification) {
+        userNotifications.add(notification);
+        notification.setNotificationUser(this);
+    }
+
+    public void removeNotification(Notification notification) {
+        userNotifications.remove(notification);
+        notification.setNotificationUser(null);
+    }
 }

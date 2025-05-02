@@ -12,15 +12,6 @@ import java.math.RoundingMode;
  */
 public class SubscriptionFeeCalculator {
 
-    // Base monthly subscription fee
-    private static final BigDecimal BASE_MONTHLY_FEE = new BigDecimal("49.99");
-
-    // Base yearly subscription fee (10% discount compared to paying monthly for a year)
-    private static final BigDecimal BASE_YEARLY_FEE = new BigDecimal("539.89");
-
-    // Default commission rate for COMMISSION_BASED subscriptions
-    private static final BigDecimal DEFAULT_COMMISSION_RATE = new BigDecimal("5.00");
-
     /**
      * Calculate the subscription amount based on subscription type
      *
@@ -30,13 +21,34 @@ public class SubscriptionFeeCalculator {
     public static BigDecimal calculateSubscriptionAmount(SubscriptionType subscriptionType) {
         switch (subscriptionType) {
             case MONTHLY:
-                return BASE_MONTHLY_FEE;
+                return SubscriptionConstants.MONTHLY_SUBSCRIPTION_FEE;
             case YEARLY:
-                return BASE_YEARLY_FEE;
+                return SubscriptionConstants.YEARLY_SUBSCRIPTION_FEE;
             case COMMISSION_BASED:
-                return BigDecimal.ZERO; // No upfront fee for commission-based subscriptions
+                // No upfront fee for commission-based subscriptions
+                return BigDecimal.ZERO;
             default:
-                return BASE_MONTHLY_FEE;
+                return SubscriptionConstants.MONTHLY_SUBSCRIPTION_FEE;
+        }
+    }
+
+    /**
+     * Calculate the commission rate based on subscription type
+     *
+     * @param subscriptionType The type of subscription
+     * @return The commission rate
+     */
+    public static BigDecimal calculateCommissionRate(SubscriptionType subscriptionType) {
+        switch (subscriptionType) {
+            case MONTHLY:
+            case YEARLY:
+                // No commission for monthly and yearly subscriptions
+                return SubscriptionConstants.ZERO_COMMISSION_RATE;
+            case COMMISSION_BASED:
+                // 10% commission for commission-based subscriptions
+                return SubscriptionConstants.COMMISSION_BASED_RATE;
+            default:
+                return SubscriptionConstants.ZERO_COMMISSION_RATE;
         }
     }
 
@@ -48,19 +60,14 @@ public class SubscriptionFeeCalculator {
      * @return The commission fee amount
      */
     public static BigDecimal calculateCommissionFee(Product product, Subscription subscription) {
-        // If not a commission-based subscription, no commission fee
+        // If no subscription or not commission-based, no commission fee
         if (subscription == null || subscription.getSubscriptionType() != SubscriptionType.COMMISSION_BASED) {
             return BigDecimal.ZERO;
         }
 
-        BigDecimal commissionRate = subscription.getSubscriptionCommissionRate();
-        if (commissionRate == null || commissionRate.compareTo(BigDecimal.ZERO) == 0) {
-            commissionRate = DEFAULT_COMMISSION_RATE;
-        }
-
         // Calculate commission fee (price * commission rate / 100)
         return product.getProductPrice()
-                .multiply(commissionRate)
+                .multiply(SubscriptionConstants.COMMISSION_BASED_RATE)
                 .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
     }
 
@@ -74,14 +81,5 @@ public class SubscriptionFeeCalculator {
     public static BigDecimal calculateTotalPriceWithCommission(Product product, Subscription subscription) {
         BigDecimal commissionFee = calculateCommissionFee(product, subscription);
         return product.getProductPrice().add(commissionFee);
-    }
-
-    /**
-     * Get the default commission rate for a new subscription
-     *
-     * @return The default commission rate
-     */
-    public static BigDecimal getDefaultCommissionRate() {
-        return DEFAULT_COMMISSION_RATE;
     }
 }

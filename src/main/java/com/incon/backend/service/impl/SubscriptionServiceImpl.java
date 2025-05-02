@@ -11,13 +11,13 @@ import com.incon.backend.mapper.SubscriptionMapper;
 import com.incon.backend.repository.SubscriptionRepository;
 import com.incon.backend.repository.UserRepository;
 import com.incon.backend.service.SubscriptionService;
+import com.incon.backend.util.SubscriptionFeeCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +36,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         // Check if user already has an active subscription
-        subscriptionRepository.findBySubscriptionUser(user)
+        subscriptionRepository.findBySubscriptionUser_UserId(userId)
                 .ifPresent(existing -> {
                     if (existing.isSubscriptionIsActive()) {
                         throw new BadRequestException("User already has an active subscription");
@@ -57,12 +57,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             setDefaultEndDate(subscription);
         }
 
-        // Set default commission rate for COMMISSION_BASED type if not provided
-        if (subscription.getSubscriptionType() == SubscriptionType.COMMISSION_BASED &&
-                (subscription.getSubscriptionCommissionRate() == null ||
-                        subscription.getSubscriptionCommissionRate().compareTo(BigDecimal.ZERO) == 0)) {
-            subscription.setSubscriptionCommissionRate(new BigDecimal("5.00")); // Default 5%
-        }
+        // Set the correct subscription amount based on the type
+        subscription.setSubscriptionAmount(
+                SubscriptionFeeCalculator.calculateSubscriptionAmount(subscription.getSubscriptionType())
+        );
+
+        // Set the correct commission rate based on the type
+        subscription.setSubscriptionCommissionRate(
+                SubscriptionFeeCalculator.calculateCommissionRate(subscription.getSubscriptionType())
+        );
 
         // Save subscription
         Subscription savedSubscription = subscriptionRepository.save(subscription);
@@ -130,11 +133,25 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public SubscriptionResponse updateSubscription(Integer subscriptionId, SubscriptionRequest subscriptionRequest) {
         Subscription subscription = getSubscriptionEntityById(subscriptionId);
 
-        // Update subscription fields
+        // Store the old subscription type to check if it changed
+        SubscriptionType oldType = subscription.getSubscriptionType();
+
+        // Update basic subscription fields
         subscriptionMapper.updateSubscriptionFromRequest(subscriptionRequest, subscription);
 
-        // Set default end date based on subscription type if not provided
-        if (subscription.getSubscriptionEndDate() == null) {
+        // If subscription type changed, update amount and commission rate automatically
+        if (oldType != subscription.getSubscriptionType()) {
+            // Set the correct subscription amount based on the new type
+            subscription.setSubscriptionAmount(
+                    SubscriptionFeeCalculator.calculateSubscriptionAmount(subscription.getSubscriptionType())
+            );
+
+            // Set the correct commission rate based on the new type
+            subscription.setSubscriptionCommissionRate(
+                    SubscriptionFeeCalculator.calculateCommissionRate(subscription.getSubscriptionType())
+            );
+
+            // Update end date if needed for the new subscription type
             setDefaultEndDate(subscription);
         }
 

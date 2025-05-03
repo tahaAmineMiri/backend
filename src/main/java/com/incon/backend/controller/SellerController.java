@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sellers")
+@RequestMapping("/api/v1/sellers")
 @RequiredArgsConstructor
 public class SellerController {
 

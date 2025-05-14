@@ -3,11 +3,12 @@ package com.incon.backend.dto.response;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+// src/main/java/com/incon/backend/dto/response/UserResponse.java
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder // Make sure this is present
+@SuperBuilder
 public class UserResponse {
     private Integer userId;
     private String userEmail;
@@ -15,4 +16,5 @@ public class UserResponse {
     private String userPosition;
     private String userBusinessPhone;
     private boolean userIsVerified;
+    private String userRole; // Added this field
 }

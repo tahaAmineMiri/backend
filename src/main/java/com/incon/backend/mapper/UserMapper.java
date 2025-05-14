@@ -1,6 +1,5 @@
 package com.incon.backend.mapper;
 
-import com.incon.backend.dto.request.UserRequest;
 import com.incon.backend.dto.response.UserResponse;
 import com.incon.backend.entity.User;
 import org.mapstruct.Mapper;
@@ -14,5 +13,6 @@ public interface UserMapper {
     @Mapping(source = "userPosition", target = "userPosition")
     @Mapping(source = "userBusinessPhone", target = "userBusinessPhone")
     @Mapping(source = "userIsVerified", target = "userIsVerified")
+    @Mapping(source = "userRole", target = "userRole") // Added this mapping
     UserResponse toUserResponse(User user);
 }
